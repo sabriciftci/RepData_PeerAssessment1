@@ -1,0 +1,39 @@
+---
+title: "Coursera, Data Science Specialization, Week 2, Assignment 1"
+author: "Sabri Ciftci"
+date: "5/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+This is an R Markdown document to create a report for Coursera-Replicable Research Course. The document uses the activity dataset to complete Assignment 1 in Week 2. 
+
+First, I will read the data which comes as a csv file. I will first load the foreign package and explore the data
+
+```{r, echo=TRUE}
+library(foreign)
+mydata<-read.csv("activity.csv")
+head(mydata)
+str(mydata)
+```
+
+##step 1
+First, I will generate a histogram of total steps per day. I will start by loading the packages, then I will calculate the sum of steps by day, and finally I will create a histogram
+
+```{r}
+library(plyr)
+library(dplyr)
+data2 <- mydata %>% group_by(date) %>% summarize(sumsteps= sum(steps)) %>% na.omit()
+hist(data2$sumsteps, main="Total Steps by day", breaks=30)
+```
+
+Now, report the mean and median number of steps taken by day.
+```{r}
+mean(data2$sumsteps)
+median(data2$sumsteps)
+```
+
