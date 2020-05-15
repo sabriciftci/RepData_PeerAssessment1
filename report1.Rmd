@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is an R Markdown document to create a report for Coursera-Replicable Research Course. The document uses the activity dataset to complete Assignment 1 in Week 2. 
 
+1. Load the data (i.e. read.csv())
 First, I will read the data which comes as a csv file. I will first load the foreign package and explore the data
 
 ```{r, echo=TRUE}
@@ -21,8 +22,7 @@ head(mydata)
 str(mydata)
 ```
 
-##step 1
-First, I will generate a histogram of total steps per day. I will start by loading the packages, then I will calculate the sum of steps by day, and finally I will create a histogram
+I will generate a histogram of total steps per day. I will start by loading the packages, then I will calculate the sum of steps by day, and finally I will create a histogram
 
 ```{r}
 library(plyr)
@@ -33,7 +33,26 @@ hist(data2$sumsteps, main="Total Steps by day", breaks=30)
 
 Now, report the mean and median number of steps taken by day.
 ```{r}
+##mean
 mean(data2$sumsteps)
+##median
 median(data2$sumsteps)
 ```
+
+2. Make a time series plot (i.e. type = “l”) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+load the libraries in case, I will use ggplot so also load this package
+Calculate the mean by interval and then generate a line plot
+
+```{r}
+library(dplyr)
+library(ggplot2)
+##first, drop the missing values
+data2<-na.omit(mydata)
+##then get the averafges in a new data
+data3<-data2 %>% group_by(interval) %>% summarize(avsteps=mean(steps))
+##Create the plot
+ ggplot(data3, aes(x=interval, y=avsteps)) + geom_line() + ggtitle("Average Steps by Interval") + xlab("Interval")+  ylab("Average Steps")
+ 
+ 
+
 
