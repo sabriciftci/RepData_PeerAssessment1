@@ -18,6 +18,7 @@ First, I will read the data which comes as a csv file. I will first load the for
 ```{r, echo=TRUE}
 library(foreign)
 mydata<-read.csv("activity.csv")
+mydata$date<-as.Date(mydata$date)
 head(mydata)
 str(mydata)
 ```
@@ -70,6 +71,20 @@ summary(sumdata)
 
 ##histogram
 hist(sumdata$x, xlab = "Average Steps", ylab = "Frequency", main = "Total Daily Steps", col="blue", breaks=30)
+```
+
+4. Weekdays and Weekends Chart
+Use the"newdata" from the imputed value
+
+```{r}
+##create a factor variable for weekday and weekend
+weekday<-c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
+newdata$wkd<-factor((weekdays(newdata$date) %in% weekday), levels=c(FALSE, TRUE), labels=c('weekend', 'weekday') )
+newdata2<-newdata %>% group_by(interval, wkd) %>% summarize(avsteps=mean(steps))
+
+#plot
+ggplot(newdata2, aes(x=interval, y=avsteps)) + geom_line() + xlab("Interval") + ylab("Average Steps") + facet_wrap(wkd ~.)
+```
 
 
  
