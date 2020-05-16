@@ -51,8 +51,30 @@ data2<-na.omit(mydata)
 ##then get the averafges in a new data
 data3<-data2 %>% group_by(interval) %>% summarize(avsteps=mean(steps))
 ##Create the plot
- ggplot(data3, aes(x=interval, y=avsteps)) + geom_line() + ggtitle("Average Steps by Interval") + xlab("Interval")+  ylab("Average Steps")
+ggplot(data3, aes(x=interval, y=avsteps)) + geom_line() + ggtitle("Average Steps by Interval") + xlab("Interval") +  ylab("Average Steps")
+```
+
+3. Impute data
+
+```{r}
+ sum(!complete.cases(mydata$steps))
+
+##create function for missing
+replacefunc<-function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
+newdata<- mydata%>% group_by(interval) %>% mutate(steps= replacefunc(steps))
+
+##calculate and report the mean median etc. 
+sumdata<- aggregate(newdata$steps, by=list(newdata$date), sum)
+head(sumdata)
+summary(sumdata)
+
+##histogram
+hist(sumdata$x, xlab = "Average Steps", ylab = "Frequency", main = "Total Daily Steps", col="blue", breaks=30)
+
+
  
  
 
-
+ 
+ 
+ 
